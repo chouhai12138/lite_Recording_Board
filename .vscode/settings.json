@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "*.ld": "linkerscript",
+        "*.s": "arm",
+        "*.h": "c",
+        "stm32f4xx_hal_conf.h": "c"
+    },
+    "cortex-debug.openocdPath": "openocd",
+    "cortex-debug.armToolchainPath": "/usr/bin",
+    "cortex-debug.gdbPath": "gdb-multiarch",
+    "files.exclude": {
+        "build/**/*.o": true,
+        "build/**/*.d": true
+    },
+    "search.exclude": {
+        "build": true,
+        "配套测试程序": true
+    },
+    "editor.rulers": [100]
+}

@@ -1,0 +1,25 @@
+# 编译产物
+build/
+*.o
+*.d
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
+*.su
+
+# 临时/备份
+.openocd-build/
+*~
+*.swp
+.vscode/ipch/
+
+# 上位机脚本缓存
+__pycache__/
+
+# 会话临时目录
+.dsh-drop/
+
+# 厂商例程压缩包（约 100MB，体积太大，不进仓库；需要时向厂商索取）
+配套测试程序/

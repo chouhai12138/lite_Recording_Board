@@ -1,0 +1,68 @@
+left_shoulder_pitch:
+  id: 11
+  direction: -1
+  homing_offset: 0.055644454369554563
+left_shoulder_roll:
+  id: 12
+  direction: -1
+  homing_offset: -1.5617945675985394
+left_shoulder_yaw:
+  id: 13
+  direction: 1
+  homing_offset: -1.1530134968740158
+left_elbow_pitch:
+  id: 14
+  direction: -1
+  homing_offset: -0.10178512835679995
+left_wrist_yaw:
+  id: 15
+  direction: 1
+  homing_offset: 0.9969261883000171
+left_wrist_roll:
+  id: 16
+  direction: -1
+  homing_offset: -0.05177343159088371
+left_wrist_pitch:
+  id: 17
+  direction: -1
+  homing_offset: -0.27574146158404
+left_gripper:
+  id: 18
+  direction: -1
+  interface_type: gripper_opening
+  closed_position: -0.324446837969532
+  open_position: 5.76794378612513
+right_shoulder_pitch:
+  id: 21
+  direction: 1
+  homing_offset: -0.046440288753397785
+right_shoulder_roll:
+  id: 22
+  direction: -1
+  homing_offset: 1.5589182658434897
+right_shoulder_yaw:
+  id: 23
+  direction: 1
+  homing_offset: -0.31083234299563944
+right_elbow_pitch:
+  id: 24
+  direction: -1
+  homing_offset: 0.1610369445108109
+right_wrist_yaw:
+  id: 25
+  direction: 1
+  homing_offset: 0.21457211092666217
+right_wrist_roll:
+  id: 26
+  direction: 1
+  homing_offset: -0.07670138013464256
+right_wrist_pitch:
+  id: 27
+  direction: -1
+  homing_offset: -0.05100641778953724
+right_gripper:
+  id: 28
+  direction: -1
+  interface_type: gripper_opening
+  closed_position: -0.23393920941066426
+  open_position: 5.882995856327085

@@ -1,0 +1,43 @@
+# =============================================================================
+#  STM32 / OpenOCD 调试器 USB 权限规则
+#
+#  安装：
+#    sudo cp tools/99-openocd.rules /etc/udev/rules.d/
+#    sudo udevadm control --reload-rules
+#    sudo udevadm trigger
+#  然后拔插一次调试器。
+#
+#  覆盖：DAPLink / CMSIS-DAP、ST-Link V2/V3、J-Link、WCH-Link
+# =============================================================================
+
+# --- DAPLink / CMSIS-DAP ---
+# 0d28:0204 = mbed DAPLink
+SUBSYSTEM=="usb", ATTR{idVendor}=="0d28", MODE="0666", GROUP="plugdev"
+# c251:xxxx = 常见国产 DAPLink (如 c251:f001)
+SUBSYSTEM=="usb", ATTR{idVendor}=="c251", MODE="0666", GROUP="plugdev"
+# 1209:0000 = 一些开源 DAPLink
+SUBSYSTEM=="usb", ATTR{idVendor}=="1209", MODE="0666", GROUP="plugdev"
+# 2e8a:0004 = Raspberry Pi Debug Probe
+SUBSYSTEM=="usb", ATTR{idVendor}=="2e8a", MODE="0666", GROUP="plugdev"
+
+# --- ST-Link V2 / V2-1 / V3 ---
+SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="3748", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="374b", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="374d", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="374e", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="374f", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="3752", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="3753", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0483", ATTR{idProduct}=="3754", MODE="0666", GROUP="plugdev"
+
+# --- J-Link ---
+SUBSYSTEM=="usb", ATTR{idVendor}=="1366", MODE="0666", GROUP="plugdev"
+
+# --- WCH-Link (1a86:8012) ---
+# 注意：WCH-Link 的 ARM 模式协议是沁恒私有的，与标准 CMSIS-DAP 不同，
+# 本规则只是让它对当前用户可读写（便于诊断/实验），并不保证 OpenOCD 能用。
+SUBSYSTEM=="usb", ATTR{idVendor}=="1a86", ATTR{idProduct}=="8012", MODE="0666", GROUP="plugdev", TAG+="uaccess"
+
+# --- 串口（USB-TTL / 板载 USB 虚拟串口）---
+KERNEL=="ttyUSB[0-9]*", MODE="0666", GROUP="plugdev"
+KERNEL=="ttyACM[0-9]*", MODE="0666", GROUP="plugdev"

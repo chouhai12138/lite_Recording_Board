@@ -1,0 +1,56 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "make -j$(nproc)",
+            "group": { "kind": "build", "isDefault": true },
+            "problemMatcher": ["$gcc"],
+            "detail": "编译生成 build/firmware.elf/.hex/.bin"
+        },
+        {
+            "label": "rebuild",
+            "type": "shell",
+            "command": "make clean && make -j$(nproc)",
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "make clean",
+            "problemMatcher": []
+        },
+        {
+            "label": "flash",
+            "type": "shell",
+            "command": "make flash",
+            "dependsOn": ["build"],
+            "problemMatcher": []
+        },
+        {
+            "label": "erase",
+            "type": "shell",
+            "command": "make erase",
+            "problemMatcher": []
+        },
+        {
+            "label": "probe-check",
+            "type": "shell",
+            "command": "make probe",
+            "problemMatcher": []
+        },
+        {
+            "label": "chip-id",
+            "type": "shell",
+            "command": "make chipid",
+            "problemMatcher": []
+        },
+        {
+            "label": "size",
+            "type": "shell",
+            "command": "make size",
+            "problemMatcher": []
+        }
+    ]
+}

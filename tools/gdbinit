@@ -1,0 +1,83 @@
+# =============================================================================
+#  .gdbinit —— STM32F407VET6 调试脚本
+#
+#  用法：
+#    终端1:  make debug      # 启动 OpenOCD GDB Server (localhost:3333)
+#    终端2:  make gdb        # 自动加载本脚本
+#
+#  手动：gdb-multiarch build/firmware.elf -x tools/gdbinit
+# =============================================================================
+
+set confirm off
+set pagination off
+set print pretty on
+set print elements 0
+
+# --- 连接 OpenOCD ---
+target extended-remote localhost:3333
+
+# --- 复位、下载、停在 main ---
+monitor reset halt
+load
+monitor reset init
+tbreak main
+continue
+
+layout src
+
+# =============================================================================
+#  自定义命令
+# =============================================================================
+
+# 时钟检查：RCC_CFGR.SWS: 00=HSI 01=HSE 10=PLL
+define clk
+  printf "=== 时钟 ===\n"
+  printf "RCC_CR      = 0x%08x\n", RCC->CR
+  printf "RCC_CFGR    = 0x%08x\n", RCC->CFGR
+  set $sws = (RCC->CFGR >> 2) & 0x3
+  if $sws == 0
+    printf "  SYSCLK 源: HSI     <-- 说明外部晶振没起振，走了兜底\n"
+  else
+    if $sws == 2
+      printf "  SYSCLK 源: PLL     <-- 正常\n"
+    else
+      printf "  SYSCLK 源: HSE\n"
+    end
+  end
+  printf "  SystemCoreClock = %d Hz\n", SystemCoreClock
+  printf "  PLLM=%d PLLN=%d PLLP=%d\n", (RCC->PLLCFGR & 0x3f), ((RCC->PLLCFGR >> 6) & 0x1ff), (((RCC->PLLCFGR >> 16) & 0x3) + 1) * 2
+end
+
+# 输出引脚状态
+define gpio
+  printf "=== GPIO 输出位 ===\n"
+  printf "GPIOA_ODR = 0x%04x  (bit15 = LED1 PA15)\n", GPIOA->ODR
+  printf "GPIOB_ODR = 0x%04x\n", GPIOB->ODR
+  printf "GPIOC_ODR = 0x%04x\n", GPIOC->ODR
+  printf "GPIOD_ODR = 0x%04x  (bit15 = LED2 PD15)\n", GPIOD->ODR
+  printf "GPIOE_ODR = 0x%04x\n", GPIOE->ODR
+end
+
+# 芯片身份：DBGMCU_IDCODE (0xE0042000)
+#   DEV_ID: 0x413 = STM32F405/407/415/417
+#   REV_ID: 版本号
+define chip
+  printf "=== 芯片 ID ===\n"
+  printf "DBGMCU_IDCODE = 0x%08x\n", *(unsigned int *)0xE0042000
+  printf "  DEV_ID = 0x%03x  %s\n", (*(unsigned int *)0xE0042000) & 0xfff, \
+    ((*(unsigned int *)0xE0042000) & 0xfff) == 0x413 ? "(STM32F405/407 正确)" : "(不是 F407！)"
+  printf "  REV_ID = 0x%04x\n", (*(unsigned int *)0xE0042000) >> 16
+  printf "Flash 大小寄存器 = %d KB\n", *(unsigned short *)0x1FFF7A22
+end
+
+# 复位到 main 重新开始
+define restart
+  monitor reset halt
+  monitor reset init
+  tbreak main
+  continue
+end
+
+# 半主机/串口无关：直接把 printf 的字符串打印出来不方便，
+# 调试时看 gpio/clk 更直观。
+echo \n调试脚本已加载：可用的自定义命令 → clk / gpio / chip / restart\n

@@ -1,0 +1,180 @@
+# lite_dynamics_calib 重力辨识结果
+# 由 `dynamics_calib identify` 生成，请勿手工编辑。
+#
+# ⚠️ 准静态下**只有一阶矩 m·c 必然可辨识**：
+#    重力势能 U = Σ m_k·g·(o_k + R_k·c_k)_z，展开为
+#      · g·(R_k (m_k·c_k))_z —— 只依赖一阶矩
+#      · m_k·g·(o_k)_z      —— 依赖质量，但仅当该连杆原点会随
+#                              近端关节垂直移动时才随 q 变化
+#    因此 mass 只在部分连杆上可辨识（如肩 pitch 连杆原点固定在
+#    基座上，其 mass 与 mx 列在数据上恒为 0）。
+#    未列出的分量 = 不可辨识，取任何值都不影响 g(q)。
+#
+# ⚠️ 参数本身**不唯一**（实测 rank 28 / 68，条件数可见 solver.rank）。
+#    零空间里的分量取值由求解器边界或 prior 决定，**不是物理量** ——
+#    例如某个 gripper 连杆的 mass 可能明显偏大。
+#    但 (mass, first_moment) **成对使用**时，g(q) 的预测是唯一的：
+#    把两者一起写回模型再 rnea，可精确复现辨识结果（已验证 |rnea(θ)−Wθ|=0）。
+#    ⇒ 运行时请**成对**使用这两个字段，不要单独解读 mass 或 com。
+schema: 1
+generated: 2026-10-20T07:26:47+00:00
+source:
+  data_file: /data/lite_dynamics_calib/src/lite_dynamics_calib/results/calibration_data.jsonl
+  points_used: 148
+  model_hash: f4906b2df83833e7752d3fb2119c3e3bcc9a21424761a8944da11bc81eb47a2b
+  plan_digest: 7ee6a00360b4a2e72e3f5c184fda187cc689f09a2def7e36eeefa33c088864dc
+solver:
+  method: bounded
+  parameters_available: 68
+  rank: 42
+  condition: 365.9
+  train_rmse_nm: 0.070069
+  holdout_rmse_nm: 0.092512
+  r_squared: 0.993967
+  holdout:
+    points: 30
+    seed: 0
+  cleaning:
+    kept: 148
+    dropped: 0
+    max_std_nm: 0.1486
+links:
+  left_elbow_pitch:
+    identified: [mass, mx, my, mz]
+    first_moment: [0.185932, 0.224944, -0.108286]
+    mass: 1.029584
+    com: [0.180590, 0.218480, -0.105174]
+  left_gripper:
+    identified: [mass, mx, my, mz]
+    first_moment: [0.008076, 0.116649, -0.172460]
+    mass: 0.533714
+    com: [0.015131, 0.218561, -0.323133]
+  left_gripper_passive_joint:
+    identified: [mass, mx, my, mz]
+    first_moment: [0.012462, -0.178837, -0.001711]
+    mass: 1.400090
+    com: [0.008901, -0.127732, -0.001222]
+  left_shoulder_pitch:
+    identified: [my, mz]
+    first_moment: [0.000000, 0.119369, -0.025029]
+    mass: null          # 该连杆质量不可辨识
+  left_shoulder_roll:
+    identified: [mass, mx, my, mz]
+    first_moment: [-0.207708, -0.180649, 0.106774]
+    mass: 1.089185
+    com: [-0.190700, -0.165857, 0.098031]
+  left_shoulder_yaw:
+    identified: [mass, mx, my, mz]
+    first_moment: [0.254742, 0.020827, 0.073836]
+    mass: 0.121945
+    com: [2.088994, 0.170787, 0.605486]
+  left_wrist_pitch:
+    identified: [mass, mx, my, mz]
+    first_moment: [0.003908, 0.005893, 0.069588]
+    mass: 0.504581
+    com: [0.007745, 0.011679, 0.137913]
+  left_wrist_roll:
+    identified: [mass, mx, my, mz]
+    first_moment: [0.015242, -0.146181, -0.030640]
+    mass: 0.663736
+    com: [0.022964, -0.220239, -0.046163]
+  left_wrist_yaw:
+    identified: [mass, mx, my, mz]
+    first_moment: [0.157815, 0.154162, -0.002155]
+    mass: 0.188278
+    com: [0.838205, 0.818802, -0.011445]
+  right_elbow_pitch:
+    identified: [mass, mx, my, mz]
+    first_moment: [-0.150494, 0.005217, 0.045544]
+    mass: 0.206487
+    com: [-0.728831, 0.025265, 0.220565]
+  right_gripper:
+    identified: [mass, mx, my, mz]
+    first_moment: [0.025605, -0.046245, 0.093340]
+    mass: 0.063821
+    com: [0.401208, -0.724603, 1.462532]
+  right_gripper_passive_joint:
+    identified: [mass, mx, my, mz]
+    first_moment: [0.025605, -0.046245, 0.093340]
+    mass: 0.005000
+    com: [5.120602, -9.248079, 18.666223]
+  right_shoulder_pitch:
+    identified: [my, mz]
+    first_moment: [0.000000, -0.085737, 0.062455]
+    mass: null          # 该连杆质量不可辨识
+  right_shoulder_roll:
+    identified: [mass, mx, my, mz]
+    first_moment: [-0.201507, -0.099142, -0.180502]
+    mass: 2.731058
+    com: [-0.073783, -0.036302, -0.066092]
+  right_shoulder_yaw:
+    identified: [mass, mx, my, mz]
+    first_moment: [-0.081850, -0.047580, 0.013612]
+    mass: 0.418516
+    com: [-0.195573, -0.113686, 0.032525]
+  right_wrist_pitch:
+    identified: [mass, mx, my, mz]
+    first_moment: [-0.170627, 0.006114, -0.064549]
+    mass: 0.843439
+    com: [-0.202299, 0.007249, -0.076531]
+  right_wrist_roll:
+    identified: [mass, mx, my, mz]
+    first_moment: [0.007885, 0.194670, 0.129746]
+    mass: 0.848351
+    com: [0.009295, 0.229468, 0.152939]
+  right_wrist_yaw:
+    identified: [mass, mx, my, mz]
+    first_moment: [-0.006136, 0.120853, -0.175789]
+    mass: 1.645405
+    com: [-0.003729, 0.073449, -0.106836]
+per_joint_rmse_nm:
+  left_shoulder_pitch: 0.110354
+  left_shoulder_roll: 0.034315
+  left_shoulder_yaw: 0.048196
+  left_elbow_pitch: 0.099282
+  left_wrist_yaw: 0.048034
+  left_wrist_roll: 0.026968
+  left_wrist_pitch: 0.031094
+  right_shoulder_pitch: 0.118615
+  right_shoulder_roll: 0.093815
+  right_shoulder_yaw: 0.066309
+  right_elbow_pitch: 0.095361
+  right_wrist_yaw: 0.031735
+  right_wrist_roll: 0.029257
+  right_wrist_pitch: 0.031228
+# 每关节常数偏置（N·m）：力矩读数零偏 + 常摩擦的经验项。
+# ⚠️ 官方 `gravity_calibration.py` 的模型就是 a·sin+b·cos+**offset**，
+#    纯 Pinocchio 模型没有这一项。**不是**刚体动力学参数，
+#    运行时按 `tau_ff = rnea(q,0,0) + offset` 直接相加。
+# ⚠️ 它随【哪一轮采集】变化（实测两轮之间肩 roll 差 0.1~0.3 N·m），
+#    所以换一轮标定就要重新辨识。
+offsets_nm:
+  left_shoulder_pitch: 0.099686
+  left_shoulder_roll: -0.140904
+  left_shoulder_yaw: -0.045285
+  left_elbow_pitch: 0.091267
+  left_wrist_yaw: -0.140766
+  left_wrist_roll: 0.002210
+  left_wrist_pitch: -0.006246
+  right_shoulder_pitch: -0.546969
+  right_shoulder_roll: 0.133973
+  right_shoulder_yaw: 0.146468
+  right_elbow_pitch: 0.135592
+  right_wrist_yaw: -0.106538
+  right_wrist_roll: 0.014258
+  right_wrist_pitch: 0.070651
+baseline_sin_cos:
+  left_shoulder_pitch: {sin: 4.7072, cos: 0.3735, offset: -0.5588, rmse: 0.4710}
+  left_shoulder_roll: {sin: 0.3241, cos: 6.3866, offset: -0.3781, rmse: 0.2518}
+  left_shoulder_yaw: {sin: -0.0854, cos: 0.3384, offset: -0.1694, rmse: 0.1322}
+  left_elbow_pitch: {sin: 1.7624, cos: 0.3266, offset: -0.0861, rmse: 0.3829}
+  left_wrist_yaw: {sin: -0.0298, cos: -0.3668, offset: 0.2051, rmse: 0.0422}
+  left_wrist_roll: {sin: 0.3865, cos: -0.3782, offset: 0.3111, rmse: 0.0824}
+  left_wrist_pitch: {sin: 0.2802, cos: -0.0858, offset: 0.1925, rmse: 0.0507}
+  right_shoulder_pitch: {sin: 4.4777, cos: 1.1079, offset: -1.1827, rmse: 0.5031}
+  right_shoulder_roll: {sin: 0.4318, cos: -6.2449, offset: 0.0749, rmse: 0.3024}
+  right_shoulder_yaw: {sin: 0.0084, cos: 0.2841, offset: -0.2883, rmse: 0.1432}
+  right_elbow_pitch: {sin: 1.3613, cos: -0.3138, offset: 0.3469, rmse: 0.4229}
+  right_wrist_yaw: {sin: -0.0073, cos: -0.1976, offset: 0.0869, rmse: 0.0308}
+  right_wrist_roll: {sin: 0.3816, cos: -0.3672, offset: 0.3244, rmse: 0.0901}
+  right_wrist_pitch: {sin: 0.2756, cos: 0.4536, offset: -0.4896, rmse: 0.0402}
